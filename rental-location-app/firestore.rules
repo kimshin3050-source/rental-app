@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 인증된 사용자만 읽기/쓰기 가능
+    match /rental_logs/{document=**} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && request.auth.uid == resource.data.editorId;
+      allow delete: if false; // 삭제는 관리자만
+    }
+    
+    // 설정 문서
+    match /settings/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

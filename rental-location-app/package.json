@@ -1,0 +1,19 @@
+{
+  "name": "rental-location-app",
+  "version": "1.0.0",
+  "description": "협력사 렌탈작업 위치 공유 시스템",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && firebase deploy"
+  },
+  "dependencies": {
+    "firebase": "^10.7.1",
+    "date-fns": "^2.30.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.8",
+    "@vitejs/plugin-legacy": "^5.2.0"
+  }
+}

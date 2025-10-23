@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "rental_logs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "workDate",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "timestamp",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "rental_logs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "company",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "workDate",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
