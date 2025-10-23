@@ -3,158 +3,149 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="협력사 렌탈작업 위치 공유 시스템">
   <title>협력사 렌탈작업 위치 공유</title>
-  <link rel="stylesheet" href="/src/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/styles.css">
 </head>
 <body>
-  <div id="app">
-    <!-- Loading Screen -->
-    <div id="loadingScreen" class="loading-screen">
-      <div class="spinner"></div>
-      <p>시스템을 초기화하는 중...</p>
-    </div>
+  <!-- 로딩 스크린 -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="spinner"></div>
+    <p>시스템을 초기화하고 있습니다...</p>
+  </div>
 
-    <!-- Main App Container -->
-    <div id="mainContent" class="container" style="display: none;">
-      <!-- Header -->
-      <header class="header">
-        <h1>협력사 렌탈작업 위치 공유</h1>
-        <div class="user-info" id="userInfo"></div>
-      </header>
+  <!-- 메인 콘텐츠 -->
+  <div id="mainContent" class="container" style="display: none;">
+    <!-- 헤더 -->
+    <header class="header">
+      <h1>협력사 렌탈작업 위치 공유</h1>
+      <div class="user-info" id="userInfo">익명 사용자</div>
+    </header>
 
-      <!-- Tab Navigation -->
-      <nav class="tab-nav">
-        <button class="tab-btn active" data-tab="register">작업 등록</button>
-        <button class="tab-btn" data-tab="view">작업 현황</button>
-        <button class="tab-btn" data-tab="map">현장 지도</button>
-      </nav>
+    <!-- 탭 네비게이션 -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="entry">작업 등록</button>
+      <button class="tab-btn" data-tab="view">작업 현황</button>
+      <button class="tab-btn" data-tab="map">현장 지도</button>
+    </nav>
 
-      <!-- Tab Contents -->
-      <main class="tab-contents">
-        <!-- 작업 등록 탭 -->
-        <div id="registerTab" class="tab-panel active">
-          <form id="rentalForm" class="rental-form">
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="workDate">작업 일자</label>
-                <input type="date" id="workDate" required>
-              </div>
-
-              <div class="form-group">
-                <label for="company">협력사</label>
-                <select id="company" required>
-                  <option value="">선택하세요</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="zone">구역 (ZONE)</label>
-                <select id="zone" required>
-                  <option value="">선택하세요</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="floor">층수</label>
-                <select id="floor" required>
-                  <option value="">선택하세요</option>
-                </select>
-              </div>
-
-              <div class="form-group full-width">
-                <label for="detailPlace">세부 위치</label>
-                <input type="text" id="detailPlace" placeholder="예: 계단실, 복도, 세대 내부 등">
-              </div>
-
-              <div class="form-group full-width">
-                <label for="content">작업 내용</label>
-                <textarea id="content" rows="3" required placeholder="렌탈 작업 내용을 입력하세요"></textarea>
-              </div>
-
-              <div class="form-group">
-                <label for="rentalCount">렌탈 수량</label>
-                <input type="number" id="rentalCount" min="0" required>
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" class="btn btn-primary">등록하기</button>
-              <button type="button" class="btn btn-secondary" id="resetBtn">초기화</button>
-            </div>
-          </form>
+    <!-- 작업 등록 탭 -->
+    <div id="entryTab" class="tab-panel active">
+      <!-- 구역 선택 지도 -->
+      <div class="zone-selection-section">
+        <h3>작업 구역 선택</h3>
+        <div class="zone-map-container">
+          <img src="./src/assets/select_map.png" alt="구역 선택 지도" class="zone-map" id="zoneSelectionMap">
+          <div id="zoneSelectionMarkers" class="zone-selection-markers"></div>
         </div>
+        <div class="selected-zone-info" id="selectedZoneInfo">
+          구역을 선택해주세요
+        </div>
+      </div>
 
-        <!-- 작업 현황 탭 -->
-        <div id="viewTab" class="tab-panel">
-          <div class="view-controls">
-            <input type="date" id="viewDate" class="view-date">
-            <button id="refreshBtn" class="btn btn-secondary">새로고침</button>
+      <!-- 작업 등록 폼 -->
+      <form id="rentalForm" class="rental-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="workDate">작업 일자</label>
+            <input type="date" id="workDate" name="workDate" required>
           </div>
           
-          <div class="stats-grid" id="statsGrid">
-            <!-- 통계 카드가 여기에 동적으로 추가됩니다 -->
+          <div class="form-group">
+            <label for="company">협력사</label>
+            <select id="company" name="company" required></select>
           </div>
-
-          <div class="table-container">
-            <table id="rentalTable">
-              <thead>
-                <tr>
-                  <th>시간</th>
-                  <th>협력사</th>
-                  <th>구역</th>
-                  <th>층수</th>
-                  <th>세부위치</th>
-                  <th>작업내용</th>
-                  <th>수량</th>
-                  <th>작성자</th>
-                </tr>
-              </thead>
-              <tbody id="tableBody">
-                <!-- 데이터가 여기에 동적으로 추가됩니다 -->
-              </tbody>
-            </table>
-            <div id="emptyMessage" class="empty-message" style="display: none;">
-              선택한 날짜에 등록된 작업이 없습니다.
-            </div>
+          
+          <div class="form-group">
+            <label for="zone">구역 (ZONE)</label>
+            <select id="zone" name="zone" required></select>
           </div>
-        </div>
-
-        <!-- 현장 지도 탭 -->
-        <div id="mapTab" class="tab-panel">
-          <div class="map-controls">
-            <input type="date" id="mapDate" class="view-date">
-            <select id="mapCompany" class="map-filter">
-              <option value="">전체 협력사</option>
-            </select>
-            <button id="mapRefreshBtn" class="btn btn-secondary">새로고침</button>
+          
+          <div class="form-group">
+            <label for="floor">층수</label>
+            <select id="floor" name="floor" required></select>
           </div>
-
-          <div class="site-map-container">
-            <img src="/images/site-map.jpg" alt="현장 지도" class="site-map" id="siteMapImage">
-            <div id="zoneMarkers" class="zone-markers">
-              <!-- 구역 마커가 여기에 동적으로 추가됩니다 -->
-            </div>
+          
+          <div class="form-group full-width">
+            <label for="detailPlace">세부 위치</label>
+            <input type="text" id="detailPlace" name="detailPlace" placeholder="예: 계단실, 복도, 세대 내부 등">
           </div>
-
-          <div class="zone-legend">
-            <h3>구역별 작업 현황</h3>
-            <div id="zoneLegend" class="legend-grid">
-              <!-- 범례가 여기에 동적으로 추가됩니다 -->
-            </div>
+          
+          <div class="form-group full-width">
+            <label for="content">작업 내용</label>
+            <textarea id="content" name="content" rows="3" placeholder="렌탈 작업 내용을 입력하세요" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="rentalCount">렌탈 수량</label>
+            <input type="number" id="rentalCount" name="rentalCount" min="0" value="0" required>
           </div>
         </div>
-      </main>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">등록하기</button>
+          <button type="button" id="resetBtn" class="btn btn-secondary">초기화</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 작업 현황 탭 -->
+    <div id="viewTab" class="tab-panel">
+      <div class="view-controls">
+        <input type="date" id="viewDate" class="view-date">
+        <button id="refreshBtn" class="btn btn-primary">새로고침</button>
+      </div>
+      
+      <div id="statsGrid" class="stats-grid"></div>
+      
+      <div class="table-container">
+        <table id="rentalTable">
+          <thead>
+            <tr>
+              <th>시간</th>
+              <th>협력사</th>
+              <th>구역</th>
+              <th>층</th>
+              <th>세부위치</th>
+              <th>작업내용</th>
+              <th>렌탈수량</th>
+              <th>작성자</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+        <div id="emptyMessage" class="empty-message" style="display: none;">
+          등록된 작업이 없습니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 현장 지도 탭 -->
+    <div id="mapTab" class="tab-panel">
+      <div class="map-controls">
+        <input type="date" id="mapDate" class="map-filter">
+        <select id="mapCompany" class="map-filter"></select>
+        <button id="mapRefreshBtn" class="btn btn-primary">새로고침</button>
+      </div>
+      
+      <!-- 현황 대시보드 지도 -->
+      <div class="site-map-container">
+        <img src="./src/assets/dash_map.png" alt="현장 현황 지도" class="site-map" id="dashboardMap">
+        <div id="zoneMarkers" class="zone-markers"></div>
+      </div>
+      
+      <div class="zone-legend">
+        <h3>구역별 작업 현황</h3>
+        <div id="zoneLegend" class="legend-grid"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Toast Notification -->
+  <!-- Toast 알림 -->
   <div id="toast" class="toast"></div>
 
-  <!-- Scripts -->
-  <script type="module" src="/src/main.js"></script>
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>
