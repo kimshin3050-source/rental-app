@@ -67,21 +67,19 @@ export const ZONE_POSITIONS = {
   '18': { left: 91, top: 75 },  // 203동
 };
 
-// 컬렉션 이름
+// 나머지 기존 내용들 (색상, 함수 등)은 그대로 유지
 export const COLLECTION_NAMES = {
   RENTAL_LOGS: 'rental_logs',
   SETTINGS: 'settings',
   IMAGES: 'images'
 };
 
-// 기본 설정
 export const DEFAULT_SETTINGS = {
   maxRentalCount: 100,
   allowAnonymous: true,
   requireApproval: false
 };
 
-// 날짜 포맷 함수
 export function formatDate(date) {
   if (!date) return '';
   const d = new Date(date);
@@ -91,7 +89,6 @@ export function formatDate(date) {
   return `${year}-${month}-${day}`;
 }
 
-// 시간 포맷 함수
 export function formatTime(timestamp) {
   if (!timestamp) return '';
   const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -100,12 +97,10 @@ export function formatTime(timestamp) {
   return `${hours}:${minutes}`;
 }
 
-// 오늘 날짜 가져오기
 export function getToday() {
   return formatDate(new Date());
 }
 
-// 색상 팔레트
 export const COLORS = {
   primary: '#2563eb',
   success: '#10b981',
@@ -115,7 +110,6 @@ export const COLORS = {
   gray: '#64748b'
 };
 
-// 협력사별 색상
 export const COMPANY_COLORS = {
   '다원건설': '#2563eb',
   '대양건설': '#10b981',
@@ -123,10 +117,4 @@ export const COMPANY_COLORS = {
   '유앤테크': '#ef4444',
   '이케이네이션': '#8b5cf6',
   '다인공영': '#ec4899'
-};
-
-// 지도 이미지 경로
-export const MAP_IMAGES = {
-  DASHBOARD: './src/assets/dash_map.png',    // 현황판용 지도
-  SELECTION: './src/assets/select_map.png'   // 작업등록용 지도
 };
